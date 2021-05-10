@@ -1,0 +1,11 @@
+group = 'com.sjl.employeedataprocessor'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	compile 'org.apache.poi:poi:5.0.0'
+}
