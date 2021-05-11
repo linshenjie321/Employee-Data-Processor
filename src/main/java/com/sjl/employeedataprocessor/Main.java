@@ -5,6 +5,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -47,6 +50,7 @@ public class Main {
 					continue;
 				}
 				supplyOptionProcessor(row);
+				jobPreferenceProcessor(row);
 				i++;
 			}
 
@@ -72,15 +76,64 @@ public class Main {
 		}
 	}
 	
-	private static void readCellValue(Cell cell, String columnHeader) {
+	private static void jobPreferenceProcessor(Row row) {
+		Cell cell = row.getCell(15);
+		String jobPreference = readCellValueAsString(cell);
+		List<String> jobPreferenceList = Arrays.asList(jobPreference.split(","));
+		System.out.println(jobPreference + " || can process = " + shouldBeProcessed(jobPreferenceList.get(0)) + " || " + identifyDuplicateNumbers(jobPreferenceList));
+		if(shouldBeProcessed(jobPreferenceList.get(0))) {
+			int i = 1;
+			for(String jobPreferenceOption : jobPreferenceList) {
+				Cell optionCell = row.getCell(15 + i);
+				if(optionCell == null) {
+					optionCell = row.createCell(15 + i);
+				}
+				optionCell.setCellValue(jobPreferenceOption.trim());
+				i++;
+			}
+		}
+	}
+	
+	private static boolean shouldBeProcessed(String input) {
+		try {
+			Integer.parseInt(input);
+			return true;
+		} catch (NumberFormatException e) {
+			return false;
+		}
+		
+	}
+	
+	private static String identifyDuplicateNumbers(List<String> jobPreferenceList) {
+		if(!shouldBeProcessed(jobPreferenceList.get(0))) {
+			return "Not Applicable";
+		}
+		String result = "";
+		List<String> jobPreferenceOptionChecker = new ArrayList<>();
+		for(String jobPreferenceOption : jobPreferenceList) {
+			if(jobPreferenceOptionChecker.contains(jobPreferenceOption.trim())) {
+				result = result + jobPreferenceOption.trim() + " ; ";
+			}else {
+				jobPreferenceOptionChecker.add(jobPreferenceOption);
+			}
+		}
+		
+		if (result.isBlank()) {
+			return "No duplicate found";
+		}else {
+			return "DUP FOUND - " + result;
+		}
+	}
+	
+	private static String readCellValueAsString(Cell cell) {
 		if(cell == null) {
-			System.out.println(columnHeader +  " = ");
-			return;
+			return "";
 		}
 		try {
-			System.out.println(columnHeader + " = " + cell.getRichStringCellValue());
+			return cell.getStringCellValue();
 		} catch (IllegalStateException ex) {
-			System.out.println(columnHeader + " = " + cell.getNumericCellValue());
+			double cellValue = cell.getNumericCellValue();
+			return String.valueOf(Double.valueOf(cellValue).intValue());
 		}
 	}
 
