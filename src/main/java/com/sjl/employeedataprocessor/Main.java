@@ -28,11 +28,11 @@ public class Main {
 		
 		
 		
-		readExcelSheet(fileLocation, 0);
+		processExcelSheet(fileLocation, 0);
 		
 	}
 	
-	private static void readExcelSheet(String fileLocation, int sheetIndex) {
+	private static void processExcelSheet(String fileLocation, int sheetIndex) {
 		try {
 			FileInputStream file = new FileInputStream(new File(fileLocation));
 			Workbook workbook = new XSSFWorkbook(file);
