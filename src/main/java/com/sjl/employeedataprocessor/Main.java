@@ -17,13 +17,13 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class Main {
 	
-	static String folderLocation = "C:\\Users\\Cometstrike\\jee-2021-03-workspace\\Employee-Data-Processor\\test-data";
-	static String outputFileName = "(MODIFIED) GOOGLE RESPONSES - ESL_LINC Summer Bidding Application 2021 - Processed.xlsx";
+	static String folderLocation = "C:\\Users\\Cometstrike\\jee-2021-03-workspace\\test_data";
+	static String outputFileName = "(MODIFIED) GOOGLE RESPONSES - ESL_LINC Summer Bidding Application 2021.xlsx - Processed.xlsx";
 	static String outputFileLocation = folderLocation + "\\" + outputFileName;
 	
 	public static void main(String[] args) {
-		String folderLocation = "C:\\Users\\Cometstrike\\jee-2021-03-workspace\\Employee-Data-Processor\\test-data";
-		String fileName = "(MODIFIED) GOOGLE RESPONSES - ESL_LINC Summer Bidding Application 2021 - Copy.xlsx";
+		String folderLocation = "C:\\Users\\Cometstrike\\jee-2021-03-workspace\\test_data";
+		String fileName = "(MODIFIED) GOOGLE RESPONSES - ESL_LINC Summer Bidding Application 2021.xlsx";
 		String fileLocation = folderLocation + "\\" + fileName;
 		
 		
@@ -49,6 +49,7 @@ public class Main {
 					i++;
 					continue;
 				}
+				System.out.println("----processing row #" + i + "-------");
 				supplyOptionProcessor(row);
 				jobPreferenceProcessor(row);
 				i++;
@@ -89,6 +90,9 @@ public class Main {
 					optionCell = row.createCell(15 + i);
 				}
 				optionCell.setCellValue(jobPreferenceOption.trim());
+				if(Integer.parseInt(jobPreferenceOption.trim()) > 63) {
+					System.out.println(" found invalid # = " + jobPreferenceOption + ";");;
+				}
 				i++;
 			}
 		}
